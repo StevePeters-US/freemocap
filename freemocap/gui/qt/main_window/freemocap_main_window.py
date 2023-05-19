@@ -70,8 +70,6 @@ from freemocap.system.paths_and_files_names import (
 from freemocap.system.start_file import open_file
 from freemocap.system.user_data.pipedream_pings import PipedreamPings
 
-import freemocap.gui.qt.widgets.
-
 EXIT_CODE_REBOOT = -123456789
 
 logger = logging.getLogger(__name__)
@@ -113,7 +111,7 @@ class FreemocapMainWindow(QMainWindow):
             self._active_recording_info_widget.set_active_recording
         )
 
-        self._sensor_widget = sensor_widget()
+        self._sensor_widget = 
 
         self._actions = Actions(freemocap_main_window=self)
 
