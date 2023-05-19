@@ -50,6 +50,9 @@ class CentralTabWidget(QTabWidget):
 
     def set_visualize_data_tab_enabled(self, enabled: bool):
         self.setTabEnabled(2, enabled)
+    
+    def set_visualize_sensor_tab_enabled(self, enabled: bool):
+        self.setTabEnabled(3, enabled)
 
     def _create_welcome_tab(self, tab_widget: QTabWidget):
         logger.info("Creating welcome tab")

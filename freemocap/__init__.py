@@ -24,7 +24,6 @@ import logging
 logger = logging.getLogger(__name__)
 logger.info(f"Initializing {__package_name__} package, version: {__version__}, from file: {__file__}")
 
-
 def RunMe(*args, **kwargs):
     logger.info(
         "User tried using `pre-alpha` entry point (`import freemocap: freemocap.RunMe() - displaying friendly message then re-directing to `freemocap.__main__:main()` entry point")

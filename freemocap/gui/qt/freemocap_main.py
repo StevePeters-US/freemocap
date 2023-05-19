@@ -30,7 +30,7 @@ def qt_gui_main():
     app = get_qt_app()
     timer = QTimer()
     timer.start(500)
-
+    
     pipedream_pings = PipedreamPings()
 
     while True:
