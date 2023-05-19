@@ -14,5 +14,18 @@ from freemocap.system.paths_and_files_names import get_most_recent_recording_pat
 logger = logging.getLogger(__name__)
 
 
-class sensor_widget(QWidget):
-   print('Sensor Widget activated')
+class sensorwidget(QWidget):
+    def __init__(
+        self,
+        parent: QWidget = None,
+    ):
+        super().__init__(parent=parent)
+        print('Sensor Widget activated')
+
+if __name__ == "__main__":
+    import sys
+
+    app = QApplication(sys.argv)
+    active_recording_widget = sensorwidget()
+    active_recording_widget.show()
+    sys.exit(app.exec())
