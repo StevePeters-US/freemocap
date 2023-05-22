@@ -70,7 +70,7 @@ from freemocap.system.paths_and_files_names import (
 from freemocap.system.start_file import open_file
 from freemocap.system.user_data.pipedream_pings import PipedreamPings
 
-#import freemocap.gui.qt.widgets.sensor_widget
+import freemocap.gui.qt.widgets.sensor_widget
 
 EXIT_CODE_REBOOT = -123456789
 
@@ -113,7 +113,7 @@ class FreemocapMainWindow(QMainWindow):
             self._active_recording_info_widget.set_active_recording
         )
 
-        self._sensor_widget = s
+        self._sensor_tab_widget = freemocap.gui.qt.widgets.sensor_widget
 
         self._actions = Actions(freemocap_main_window=self)
 
@@ -246,8 +246,8 @@ class FreemocapMainWindow(QMainWindow):
             welcome_to_freemocap_widget=self._home_widget,
             skelly_viewer_widget=self._skelly_viewer_widget,
             directory_view_widget=self._directory_view_widget,
-            active_recording_info_widget=self._active_recording_info_widget
-            sensor_widget=self.sens
+            active_recording_info_widget=self._active_recording_info_widget,
+            sensor_tab_widget=self._sensor_tab_widget,
         )
 
         center_tab_widget.set_welcome_tab_enabled(True)

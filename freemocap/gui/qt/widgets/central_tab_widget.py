@@ -22,6 +22,7 @@ class CentralTabWidget(QTabWidget):
         skelly_viewer_widget: QWidget,
         directory_view_widget: QWidget,
         active_recording_info_widget: QWidget,
+        sensor_tab_widget: QWidget,
         parent=None,
     ):
         super().__init__(parent=parent)
@@ -35,12 +36,14 @@ class CentralTabWidget(QTabWidget):
         self._skelly_viewer_widget = skelly_viewer_widget
         self._directory_view_widget = directory_view_widget
         self._active_recording_info_widget = active_recording_info_widget
+        self._sensor_tab_widget = sensor_tab_widget
 
         self._create_welcome_tab(self)
         self._create_skellycam_view_tab(self)
         self._create_skelly_viewer_tab(self)
         self._create_directory_view_tab(self)
         self._create_active_recording_info_tab(self)
+        self._create_sensor_info_tab(self)
 
     def set_welcome_tab_enabled(self, enabled: bool):
         self.setTabEnabled(0, enabled)
@@ -51,7 +54,7 @@ class CentralTabWidget(QTabWidget):
     def set_visualize_data_tab_enabled(self, enabled: bool):
         self.setTabEnabled(2, enabled)
     
-    def set_visualize_sensor_tab_enabled(self, enabled: bool):
+    def set_sensor_tab_enabled(self, enabled: bool):
         self.setTabEnabled(3, enabled)
 
     def _create_welcome_tab(self, tab_widget: QTabWidget):
@@ -84,4 +87,8 @@ class CentralTabWidget(QTabWidget):
     def _create_active_recording_info_tab(self, tab_widget: QTabWidget):
         logger.info("Creating active recording info tab")
         tab_widget.addTab(self._active_recording_info_widget, f"Active Recording Info")
+
+    def _create_sensor_info_tab(self, tab_widget: QTabWidget):
+        logger.info("Creating sensor info tab")
+        tab_widget.addTab(self._sensor_tab_widget, f"Sensor Info")
 
