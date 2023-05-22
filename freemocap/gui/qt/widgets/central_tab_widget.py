@@ -10,6 +10,8 @@ from freemocap.gui.qt.widgets.home_widget import (
 )
 from freemocap.system.paths_and_files_names import CAMERA_WITH_FLASH_EMOJI_STRING, EYES_EMOJI_STRING
 
+import freemocap.gui.qt.widgets.sensor_widget
+
 logger = logging.getLogger(__name__)
 
 
@@ -89,6 +91,6 @@ class CentralTabWidget(QTabWidget):
         tab_widget.addTab(self._active_recording_info_widget, f"Active Recording Info")
 
     def _create_sensor_info_tab(self, tab_widget: QTabWidget):
-        logger.info("Creating sensor info tab")
+        #logger.info("Creating sensor info tab")
         tab_widget.addTab(self._sensor_tab_widget, f"Sensor Info")
 
