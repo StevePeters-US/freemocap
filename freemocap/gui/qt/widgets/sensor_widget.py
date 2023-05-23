@@ -5,6 +5,8 @@ import serial.tools.list_ports as list_ports
 import datetime as dt
 import pandas as pd
 import time
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtGui
 
 class SensorWidget(QWidget):
     def __init__(self, parent=None):
@@ -15,12 +17,21 @@ class SensorWidget(QWidget):
         self.setLayout(self.layout)
 
         self.timer = QTimer(self)
+        self.elapsed_time = 0.0
+        self.start_time = 0.0
 
         ports = list(list_ports.comports())
         if ports:
             port_name = ports[0].device
             serialPort = serial.Serial(port=port_name, baudrate=115200, timeout=1)
             self.chart_data = pd.DataFrame()
+
+            # Create a PlotWidget for real-time data plotting
+            self.plot_widget = pg.PlotWidget()
+            self.layout.addWidget(self.plot_widget)
+
+            # Initialize the plot curve
+            self.plot_curve = self.plot_widget.plot()
 
             def collect_data():
                 serialPort.write(b'g')
@@ -30,15 +41,27 @@ class SensorWidget(QWidget):
                 if arduino_data:
                     print('arduino data' + arduino_data[0])
                     time_now = dt.datetime.now()
-                    elapsed_time = 0.0
+                    #self.elapsed_time = time_now - self.start_time
+                    self.elapsed_time = round((time_now - self.start_time).total_seconds(), 2)
                     
-                    new_row = {'time': time_now, 'kg': arduino_data[0], 'elapsedTime': elapsed_time}
+                    new_row = {'time': time_now, 'kg': arduino_data[0], 'elapsedTime': self.elapsed_time}
                     new_df = pd.DataFrame([new_row])
                     print(new_df)
                     self.chart_data = pd.concat([self.chart_data, new_df], ignore_index=True)
 
+                    # Convert 'kg' column to numeric type, handle non-numeric values as NaN
+                    self.chart_data['kg'] = pd.to_numeric(self.chart_data['kg'], errors='coerce')
+
+                    # Exclude non-numeric values from the plot
+                    valid_data = self.chart_data.loc[self.chart_data['kg'].notna()]
+
+                    # Update the plot curve with the latest data
+                    self.plot_curve.setData(valid_data['elapsedTime'], valid_data['kg'])
+
+
             # Add a method to trigger data collection
             def start_collecting_data():
+                self.start_time = dt.datetime.now()
                 self.timer.timeout.connect(collect_data)
                 self.timer.start(100)
 
