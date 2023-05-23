@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget, QPushButton
+from PyQt6.QtCore import QTimer
 import serial
 import serial.tools.list_ports as list_ports
 import datetime as dt
@@ -12,6 +13,8 @@ class SensorWidget(QWidget):
         self.label = QLabel("This is sensorwidget!")
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
+
+        self.timer = QTimer(self)
 
         ports = list(list_ports.comports())
         if ports:
@@ -34,16 +37,23 @@ class SensorWidget(QWidget):
                     print(new_df)
                     self.chart_data = pd.concat([self.chart_data, new_df], ignore_index=True)
 
-        # Add a method to trigger data collection
-        def start_collecting_data():
-            collect_data()
+            # Add a method to trigger data collection
+            def start_collecting_data():
+                self.timer.timeout.connect(collect_data)
+                self.timer.start(100)
 
-        self.start_collecting_data = start_collecting_data
+            # Add a method to stop data collection
+            def stop_collecting_data():
+                self.timer.stop()
 
-        # Create a button to start data collection
-        self.start_button = QPushButton("Start Collecting Data")
-        self.start_button.clicked.connect(collect_data)
-        self.layout.addWidget(self.start_button)
+            self.start_collecting_data = start_collecting_data
 
-
+            # Create a button to start data collection
+            self.start_button = QPushButton("Start Collecting Data")
+            self.start_button.clicked.connect(start_collecting_data)
+            self.layout.addWidget(self.start_button)
+            
+            self.stop_button = QPushButton("Stop Collecting Data")
+            self.stop_button.clicked.connect(stop_collecting_data)
+            self.layout.addWidget(self.stop_button)
 
