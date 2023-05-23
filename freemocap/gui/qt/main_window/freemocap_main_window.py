@@ -72,6 +72,7 @@ from freemocap.system.user_data.pipedream_pings import PipedreamPings
 
 from freemocap.gui.qt.widgets.sensor_widget import SensorWidget
 
+
 EXIT_CODE_REBOOT = -123456789
 
 logger = logging.getLogger(__name__)
