@@ -115,8 +115,6 @@ class FreemocapMainWindow(QMainWindow):
             self._active_recording_info_widget.set_active_recording
         )
 
-        self._sensor_widget = SensorWidget()
-
         self._actions = Actions(freemocap_main_window=self)
 
         self._menu_bar = MenuBar(actions=self._actions, parent=self)
@@ -239,6 +237,8 @@ class FreemocapMainWindow(QMainWindow):
         )
 
         self._skelly_viewer_widget = SkellyViewer()
+
+        self._sensor_widget = SensorWidget(skellycam_widget = self._skellycam_widget, parent=self)
 
         center_tab_widget = CentralTabWidget(
             parent=self,

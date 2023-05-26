@@ -58,7 +58,7 @@ class CentralTabWidget(QTabWidget):
     
     def set_visualize_sensor_tab_enabled(self, enabled: bool):
         self.setTabEnabled(3, enabled)
-
+                
     def _create_welcome_tab(self, tab_widget: QTabWidget):
         logger.info("Creating welcome tab")
         tab_widget.addTab(self._welcome_to_freemocap_widget, "Home")
@@ -93,4 +93,3 @@ class CentralTabWidget(QTabWidget):
     def _create_sensor_info_tab(self, tab_widget: QTabWidget):
         #logger.info("Creating sensor info tab")
         tab_widget.addTab(self._sensor_tab_widget, f"Sensor Info")
-

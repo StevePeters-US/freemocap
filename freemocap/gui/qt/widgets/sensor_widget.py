@@ -7,10 +7,17 @@ import pandas as pd
 import time
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
+from skellycam import (
+    SkellyCamParameterTreeWidget,
+    SkellyCamWidget,
+    SkellyCamControllerWidget,
+)
+
 
 class SensorWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, skellycam_widget : SkellyCamWidget, parent=None):
         super().__init__(parent)
+        self._skellycam_widget = skellycam_widget
         self.layout = QVBoxLayout()
         self.label = QLabel("This is sensorwidget!")
         self.layout.addWidget(self.label)
@@ -19,6 +26,9 @@ class SensorWidget(QWidget):
         self.timer = QTimer(self)
         self.elapsed_time = 0.0
         self.start_time = 0.0
+
+    
+
 
         # Create a combo box for selecting the COM port
         self.com_port_combo = QComboBox()
@@ -43,6 +53,7 @@ class SensorWidget(QWidget):
 
         self.serial_port = open_serial_port()
         self.chart_data = pd.DataFrame()
+        self.recording_data = False
 
         # Create a PlotWidget for real-time data plotting
         self.plot_widget = pg.PlotWidget()
@@ -79,6 +90,8 @@ class SensorWidget(QWidget):
 
         # Add a method to trigger data collection
         def start_collecting_data():
+            print('Starting sensor data collection')
+            self.recording_data = True
             self.chart_data = pd.DataFrame()
             self.start_time = dt.datetime.now()
             self.timer.timeout.connect(collect_data)
@@ -86,6 +99,8 @@ class SensorWidget(QWidget):
 
         # Add a method to stop data collection
         def stop_collecting_data():
+            print('Ending sensor data collection')
+            self.recording_data = False
             self.timer.stop()
 
             # Save chart data to a CSV file
@@ -93,6 +108,15 @@ class SensorWidget(QWidget):
             self.chart_data.to_csv(file_name, index=False)
             print(f"Chart data saved to '{file_name}'")
 
+        def check_recording_state():
+            #Begin Recording
+            if self.recording_data == False and self._skellycam_widget.is_recording == True:
+                start_collecting_data()
+            
+            if self.recording_data == True and self._skellycam_widget.is_recording == False:
+                stop_collecting_data()
+
+        self.check_recording_state = check_recording_state
         self.start_collecting_data = start_collecting_data
 
         # Create a button to start data collection
@@ -103,3 +127,8 @@ class SensorWidget(QWidget):
         self.stop_button = QPushButton("Stop Collecting Data")
         self.stop_button.clicked.connect(stop_collecting_data)
         self.layout.addWidget(self.stop_button)
+
+        # Create a timer to check the recording state periodically
+        self.recording_timer = QTimer(self)
+        self.recording_timer.timeout.connect(self.check_recording_state)
+        self.recording_timer.start(100)  # Start the recording state timer
